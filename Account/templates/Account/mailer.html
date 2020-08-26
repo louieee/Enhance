@@ -1,0 +1,78 @@
+
+{% load i18n static %}<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
+<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
+<head>
+<title>Enhance || Send Email</title>
+<link rel="stylesheet" type="text/css" href="{% block stylesheet %}{% static "admin/css/base.css" %}{% endblock %}">
+{% if not is_popup and is_nav_sidebar_enabled %}
+  <link rel="stylesheet" type="text/css" href="{% static "admin/css/nav_sidebar.css" %}">
+
+
+    <script src="{% static 'admin/js/nav_sidebar.js' %}" defer></script>
+{% endif %}
+{% block extrastyle %}{% endblock %}
+{% if LANGUAGE_BIDI %}<link rel="stylesheet" type="text/css" href="{% block stylesheet_rtl %}{% static "admin/css/rtl.css" %}{% endblock %}">{% endif %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+{% block responsive %}
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/responsive.css" %}">
+    {% if LANGUAGE_BIDI %}<link rel="stylesheet" type="text/css" href="{% static "admin/css/responsive_rtl.css" %}">{% endif %}
+{% endblock %}
+{% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE">{% endblock %}
+</head>
+{% load i18n %}
+
+<body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %}"
+  data-admin-utc-offset="{% now "Z" %}">
+
+<!-- Container -->
+<div id="container">
+
+		<!-- Page Title
+		============================================= -->
+		<section id="content p-0" style="overflow: inherit!important;  background-image: url({% static "images/page/bg.jpg"%}); background-size: cover; background-attachment: fixed;">
+
+			<div class="content-wrap" style="background-image: url({% static "images/page/bgx.jpg"%});  background-size: cover; background-attachment: fixed;">
+
+				<div class="container clearfix">
+
+					<div class="accordion accordion-lg divcenter nobottommargin clearfix" style="max-width: 550px;">
+
+						<div>
+                            <p>{% if user is not None %}Dear {{ user }}{% else %}Hello User,{% endif %}, </p>
+                            <p>
+                                {{ message}}
+                            </p>
+                            {% if link %}
+                            <p class="text-center"><a href="{{ link }}" class="btn btn-info nomargin">
+                                Click here to Proceed
+                            </a></p>
+                            <p class="text-center">or You can click this link below</p>
+                            <p class="text-center"><a href="{{ link}}">{{ link }}</a></p>
+                            {% endif %}
+                            <p>Cheers</p>
+                            <p>From DateFix Team</p>
+                        </div>
+                        <div class="bg-secondary mx-0 p-2 mt-2">
+                            <small class="text-white">If you dont have an account with us, please ignore. Thank you</small>
+                        </div>
+
+
+
+					</div>
+
+				</div>
+
+			</div>
+
+		</section><!-- #content end -->
+	<div id="gotoTop" class="icon-angle-up"></div>
+</div>
+</body>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+
+

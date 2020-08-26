@@ -1,0 +1,190 @@
+
+{% load i18n static %}<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
+<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
+<head>
+<title>Enhance || Send Email</title>
+<link rel="stylesheet" type="text/css" href="{% block stylesheet %}{% static "admin/css/base.css" %}{% endblock %}">
+{% if not is_popup and is_nav_sidebar_enabled %}
+  <link rel="stylesheet" type="text/css" href="{% static "admin/css/nav_sidebar.css" %}">
+
+
+    <script src="{% static 'admin/js/nav_sidebar.js' %}" defer></script>
+{% endif %}
+{% block extrastyle %}{% endblock %}
+{% if LANGUAGE_BIDI %}<link rel="stylesheet" type="text/css" href="{% block stylesheet_rtl %}{% static "admin/css/rtl.css" %}{% endblock %}">{% endif %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+{% block responsive %}
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/responsive.css" %}">
+    {% if LANGUAGE_BIDI %}<link rel="stylesheet" type="text/css" href="{% static "admin/css/responsive_rtl.css" %}">{% endif %}
+{% endblock %}
+{% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE">{% endblock %}
+</head>
+{% load i18n %}
+
+<body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %}"
+  data-admin-utc-offset="{% now "Z" %}">
+
+<!-- Container -->
+<div id="container">
+
+    {% if not is_popup %}
+    <!-- Header -->
+    <div id="header">
+        <div id="branding">
+        <h1 id="site-name"><a href="{% url 'admin:index' %}">Enhance</a></h1>
+        </div>
+        {% block usertools %}
+        {% if user.is_staff %}
+        <div id="user-tools">
+            {% block welcome-msg %}
+                {% translate 'Welcome,' %}
+                <strong>{% firstof user.get_short_name user.get_username %}</strong>.
+            {% endblock %}
+            {% block userlinks %}
+                {% if site_url %}
+                    <a href="{{ site_url }}">{% translate 'View site' %}</a> /
+                {% endif %}
+                {% if user.is_active and user.is_staff %}
+                    {% url 'django-admindocs-docroot' as docsroot %}
+                    {% if docsroot %}
+                        <a href="{{ docsroot }}">{% translate 'Documentation' %}</a> /
+                    {% endif %}
+                {% endif %}
+                {% if user.has_usable_password %}
+                <a href="{% url 'admin:password_change' %}">{% translate 'Change password' %}</a> /
+                {% endif %}
+                <a href="{% url 'admin:logout' %}">{% translate 'Log out' %}</a>
+            {% endblock %}
+        </div>
+        {% endif %}
+        {% endblock %}
+
+    </div>
+    <!-- END Header -->
+    {% block breadcrumbs %}
+    <div class="bg-light">
+        <p class="display-1 px-3 py-2 text-warning" style="font-size: xx-large">Send E-mail</p>
+        <hr/>
+    </div>
+    {% endblock %}
+    {% endif %}
+
+    <div class="main shifted" id="main">
+      <div class="content">
+        {% block messages %}
+          {% if messages %}
+            <ul class="messagelist">{% for message in messages %}
+              <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|capfirst }}</li>
+            {% endfor %}</ul>
+          {% endif %}
+        {% endblock messages %}
+        <!-- Content -->
+        <div id="content" class="{% block coltype %}colM{% endblock %}">
+            {% if users %}
+                <form id="email_form" method="post" action="{% url 'index' %}" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-sm-3 h6">Subject</div>
+                        <div class="col-sm-9">
+                            <input name="subject" id="subject" required class="form-control" type="text"/>
+                        </div>
+                    </div>
+                    <hr/>
+                    <div class="row">
+                        <div class="col-sm-3 h6">Email(s)</div>
+                        <div class="col-sm-9">
+                            <input id="email"  class="form-control" name="email" type="hidden" placeholder="email" value="{% for email in users%}{{ email }},{% endfor %}"/>
+                            <div class="p-3 border border-dark rounded">
+                                {% for email in users%}
+                                    <span class="m-2 p-1 bg-light rounded btn-sm">
+                                        {{ email }}
+                                    </span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <hr/>
+                <div class="row">
+                        <div class="col-sm-3 h6">Message</div>
+                        <div class="col-sm-9">
+                            <textarea id="message" class="form-control" required name="message" rows=6></textarea>
+                        </div>
+                    </div>
+                    <hr/>
+                <div class="row">
+                        <div class="col-sm-3 h6">Attachment(s)</div>
+                        <div class="col-sm-8">
+                            <div id="attach" class="p-2 border border-dark rounded"></div>
+                        </div>
+                        <div class="col-sm-1">
+                            <a id="add" class="btn text-white btn-sm" style="background-color: #417690">Add</a>
+                        </div>
+                    </div>
+                    <hr/>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <a class="btn text-white btn-block"  id="submit" style="background-color: #417690">Send</a>
+                    </div>
+                </div>
+
+                </form>
+            {% else %}
+                <h1 class="text-danger">Hello, world!</h1>
+            {% endif %}
+        </div>
+        <!-- END Content -->
+        {% block footer %}<div id="footer"></div>{% endblock %}
+      </div>
+    </div>
+</div>
+<!-- END Container -->
+</body>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+<script>
+    const attachments = document.getElementById('attach')
+    const send = document.getElementById('submit')
+    const subject = document.getElementById('subject')
+    const message = document.getElementById('message')
+    const email = document.getElementById('email')
+    const form_ = document.getElementById('email_form')
+    const add = document.getElementById("add")
+    let count = 0
+    send.onclick =()=> {
+        form_.submit()
+    }
+    window.onload = function() {
+        add.onclick = ()=>{
+            count = count + 1
+            const new_ = document.createElement('input')
+            new_.type = 'file'
+            new_.className = 'd-none'
+            new_.id = 'attach_'+count
+            new_.name = 'attach_'+count
+            new_.onchange = (e)=>{
+                if (e.target.files && e.target.files[0]){
+                    const new_node = document.createElement('span')
+                    new_node.className = "m-2 p-1 bg-light rounded btn-sm"
+                    new_node.innerText = e.target.files[0].name
+                    new_node.id = 'attach'+count
+                    new_node.onclick =(e)=>{
+                        attachments.removeChild(new_node)
+                        let ele = document.getElementById(new_node.id.replace('attach', 'attach_'))
+                        form_.removeChild(ele)
+                    }
+                    attachments.appendChild(new_node)
+                }
+            }
+            form_.appendChild(new_)
+            new_.click()
+
+        }
+
+    }
+
+
+
+</script>
+</html>
