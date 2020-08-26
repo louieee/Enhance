@@ -125,7 +125,7 @@ EMAIL_HOST_USER = 'ohaegbulouis@gmail.com'
 
 EMAIL_HOST_PASSWORD = '1BILLION'
 
-DEFAULT_FROM_EMAIL = 'admin@datefix.me'
+DEFAULT_FROM_EMAIL = 'admin@enhanceit.herokuapp.com'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
