@@ -1,7 +1,8 @@
 from django.contrib.admin import AdminSite
 from django.template.response import TemplateResponse
 from django.views.decorators.cache import never_cache
-from Account.functions import created_24hrs_ago, created_last_month, created_last_week, created_last_year
+from Account.functions import created_24hrs_ago, created_last_month, created_last_week, created_last_year, paid_users,\
+    active_users
 
 
 class EnhanceAdminSite(AdminSite):
@@ -21,7 +22,9 @@ class EnhanceAdminSite(AdminSite):
             'last_day': created_24hrs_ago(),
             'last_week': created_last_week(),
             'last_month': created_last_month(),
-            'last_year': created_last_year()
+            'last_year': created_last_year(),
+            'active': active_users(),
+            'paid': paid_users()
         }
 
         request.current_app = self.name
