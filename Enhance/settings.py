@@ -31,12 +31,13 @@ ALLOWED_HOSTS = ['enhanceit.herokuapp.com', '127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
+
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Account.apps.AccountConfig',
+    'Account',
     'Account.apps.EnhanceAdminConfig'
 ]
 
